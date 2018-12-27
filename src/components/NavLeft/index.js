@@ -1,13 +1,13 @@
 import React from 'react'
-// import MenuConfig from '../../config/meunConfig'
+import MenuConfig from '../../config/meunConfig'
 import { Menu, Icon } from 'antd'
+import './index.less'
 const SubMenu = Menu.SubMenu
 
 export default class NavLeft extends React.Component{
-  rootSubmenuKeys = ['sub1', 'sub2', 'sub4'];
-
+  rootSubmenuKeys = ['/admin/form', '/admin/table', '/admin/charts','/admin/order']
   state = {
-    openKeys: ['sub1'],
+    openKeys: ['sub1']
   }
   onOpenChange = (openKeys) => {
     const latestOpenKey = openKeys.find(key => this.state.openKeys.indexOf(key) === -1);
@@ -20,11 +20,44 @@ export default class NavLeft extends React.Component{
     }
   }
 
+  componentWillMount () {
+    const menuTreeNode = this.renderMenu(MenuConfig)
+    this.setState({
+      menuTreeNode
+    })
+  }
+  // 菜单渲染
+  renderMenu = (data) => {
+    return data.map(v => {
+      if (v.children) {
+        this.rootSubmenuKeys.push(v.key)
+        return (
+          <SubMenu key={v.key} title={<span><Icon type={v.type} /><span>{v.title}</span></span>}>
+            {this.renderMenu(v.children)}
+          </SubMenu>
+        )
+      }
+      return <Menu.Item  key={v.key} ><Icon type={v.type}/> {v.title} </Menu.Item>
+    })
+  }
+  
+
   render () {
     return (
-      <div className="logo">
-        <img src="" alt="" />
-        <h1></h1>
+      <div>
+        <div className="logo">
+          <img src="/assets/logo-ant.svg" alt="" />
+          <h1>管理系统</h1>
+        </div>
+        <Menu
+          mode="inline"
+          theme="dark"
+          openKeys={this.state.openKeys}
+          onOpenChange={this.onOpenChange}
+          style={{ width: 256 }}
+        >
+          { this.state.menuTreeNode }
+        </Menu>
       </div>
     )
   }
