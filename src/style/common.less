@@ -12,6 +12,13 @@
   .main{
     height: calc(100vh);
     background: @colorL;
+    overflow: auto;
+    .header {
+      margin-left: 20px;
+      margin-right: 20px;
+      padding-left: 10px;
+      padding-right: 10px;
+    }
   }
   .content{
     position: relative;
@@ -21,4 +28,7 @@
 
 ::-webkit-scrollbar {
     display: none;
+  }
+  .ant-menu-item > a {
+    display: inline-block !important;
   }
